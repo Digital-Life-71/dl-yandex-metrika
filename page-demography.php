@@ -1,25 +1,9 @@
 <?php
 $dl_metrika_id = get_option('dl_yandex_metrika_id');
 $dl_token = get_option('dl_yandex_metrika_token');
+$date = date('Ymd',strtotime("-1 month"));
 
-
-$date1 = $_GET['date'];
-if($date1 == 'week') {		// если неделя
-	$date1 = date('Ymd',strtotime("-7 day"));
-} elseif($date1 == 'month') {	// если месяц
-	$date1 = date('Ymd',strtotime("-1 month"));
-} elseif($date1 == 'quart') {	// если квартал
-	$date1 = date('Ymd',strtotime("-3 month"));
-} elseif($date1 == 'year') {	// если год
-	$date1 = date('Ymd',strtotime("-12 month"));
-} else {
-	$date1 = date('Ymd',strtotime("-7 day"));
-}
-
-$date2 = date('Ymd');
-
-
-$url = 'https://api-metrika.yandex.ru/stat/demography/age_gender.json?id='.$dl_metrika_id.'&oauth_token='.$dl_token.'&date1='.$date1.'&date2='.$date2;
+$url = 'https://api-metrika.yandex.ru/stat/demography/age_gender.json?id='.$dl_metrika_id.'&oauth_token='.$dl_token.'&date1='.$date;
 $json_data = file_get_contents($url);
 $json_data = json_decode($json_data, true);
 ?>
@@ -48,7 +32,6 @@ foreach($json_data[data_gender] as $key => $value) {
 		title: 'Пол посетителей',
         pieHole: 0.4,  
 		height: 400,
-		'chartArea': {'width': '70%', 'height': '70%'},
       };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart'));
@@ -78,7 +61,6 @@ foreach($json_data[data] as $key => $value) {
 		title: 'Возрастная группа',
         pieHole: 0.4,  
 		height: 400,
-		'chartArea': {'width': '70%', 'height': '70%'},
       };
 
         var chart = new google.visualization.PieChart(document.getElementById('datachart'));
@@ -87,30 +69,6 @@ foreach($json_data[data] as $key => $value) {
     </script>	
 
 <div class="wrap">
-<div class="wp-filter" style="margin: 0;">
-	<ul class="filter-links">
-		<li>Показать</li>
-		<!--<li>
-			<a href="admin.php?page=dl_metrika_traffic&date=year" 
-			<?php if($_GET['date'] == 'year') echo 'class="current"' ?>>Год</a>
-			</li>-->
-		<li>
-			<a href="admin.php?page=dl_metrika_demography&date=quart" 
-			<? if($_GET['date'] == 'quart') echo 'class="current"' ?>>квартал</a>
-			</li>
-		<li>
-			<a href="admin.php?page=dl_metrika_demography&date=month" 
-			<? if($_GET['date'] == '') echo 'class="current"';
-			   if($_GET['date'] == 'month') echo 'class="current"' ?>>месяц</a>
-			</li>
-		<li>
-			<a href="admin.php?page=dl_metrika_demography&date=week" 
-			<? 
-			   if($_GET['date'] == 'week') echo 'class="current"';
-			?>>неделя</a>
-			</li>
-	</ul>
-</div>
     <div class="postbox-container" style="width: 100%">
         <div class="metabox-holder">
             <div class="meta-box-sortables">
@@ -200,24 +158,16 @@ foreach($json_data[data] as $key => $value) {
 
 <br>
 
-	<?php if(get_option('dl_yandex_metrika_developer_url') <> '') { ?>
-	<div class="postbox" id="second">
-		<h3 class="hndle" style="cursor: default">URL json</h3>
-		<div class="inside">
-			<?php if(get_option('dl_yandex_metrika_developer_url') <> '') { ?>
-			<a href="<?php echo $url.'&pretty=1'; ?>" target="_blank"><?php echo $url; ?></a><?php } ?>
-		</div>
-	</div>
-	<?php } ?>	
-	
-	<?php if(get_option('dl_yandex_metrika_developer') <> '') { ?>
-	<div class="postbox" id="second">
-		<h3 class="hndle" style="cursor: default">Массив данных</h3>
-		<div class="inside">
-			<pre><?php print_r($json_data); ?></pre>
-		</div>
-	</div>
-	<?php } ?>
+				<?php if(get_option('dl_yandex_metrika_developer') <> '') { ?>
+				<div class="postbox" id="second">
+                    <h3 class="hndle" style="cursor: default">Массив данных</h3>
+                    <div class="inside">
+						<?php if(get_option('dl_yandex_metrika_developer_url') <> '') { ?>
+						<a href="<?php echo $url.'&pretty=1'; ?>" target="_blank"><?php echo $url; ?></a><?php } ?>						
+                        <pre><?php print_r($json_data); ?></pre>
+                    </div>
+                </div>
+				<?php } ?>
 				
             </div>
         </div>
