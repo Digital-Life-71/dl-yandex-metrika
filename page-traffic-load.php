@@ -18,6 +18,7 @@ if($date1 == 'week') {		// если неделя
 
 $date2 = date('Ymd');
 
+
 $group = $_GET['group'];
 if($group == 'day'){
 	$group = 'day';
@@ -30,27 +31,26 @@ if($group == 'day'){
 }
 
 
-$url = 'https://api-metrika.yandex.ru/stat/traffic/summary.json?id='.$dl_metrika_id.'&oauth_token='.$dl_token.'&date1='.$date1.'&date2='.$date2.'&group='.$group;
+$url = 'https://api-metrika.yandex.ru/stat/traffic/load.json?id='.$dl_metrika_id.'&oauth_token='.$dl_token.'&date1='.$date1.'&date2='.$date2.'&group='.$group;
 $json_data = file_get_contents($url);
 $json_data = json_decode($json_data, true); 
 ?>
 <div class="wrap">
-<h2>Отчет Посещаемость <a href="https://metrika.yandex.ru/stat/traffic?id=<?php echo $dl_metrika_id; ?>" target="_blank" style="float: right" class="button">Отчет на Yandex.Metrika</a></h2>
+<h2>Отчет Нагрузка на сайт <a href="https://metrika.yandex.ru/legacy/load?id=<?php echo $dl_metrika_id; ?>" target="_blank" style="float: right" class="button">Отчет на Yandex.Metrika</a></h2>
 <script type="text/javascript">
       google.load("visualization", "1.1", {packages:["bar"]});
       google.setOnLoadCallback(drawChart);
       function drawChart() {
         var data = google.visualization.arrayToDataTable([
-          ['', 'Визиты', 'Просмотры', 'Посетители'],
+          ['', 'Запросы в секунду (максимум)', 'Посетители онлайн (максимум)'],
 <?php
 foreach($json_data[data] as $key => $value) { 
 	
 	$date = date('d.m.y',strtotime($json_data[data][$key][date]));
-	$visites = $json_data[data][$key][visits];
-	$page_views = $json_data[data][$key][page_views];
-	$visitors = $json_data[data][$key][visitors];
+	$max_rps = $json_data[data][$key][max_rps];
+	$max_users = $json_data[data][$key][max_users];
 	
-	echo '[\''. $date .'\','.$visites.','.$page_views.','.$visitors.'],';
+	echo '[\''. $date .'\','.$max_rps.','.$max_users.'],';
 
 }
 ?>
@@ -58,7 +58,7 @@ foreach($json_data[data] as $key => $value) {
 
          var options = {
           chart: {
-            title: 'Данные о посещаемости сайта'
+            title: 'Данные о максимальном количестве запросов (срабатываний счетчика) в секунду и максимальное количество посетителей онлайн'
           }
         };
 
@@ -74,36 +74,32 @@ foreach($json_data[data] as $key => $value) {
 <div class="wp-filter" style="margin: 0;">
 	<ul class="filter-links">
 		<li>Показать</li>
-		<!--<li>
-			<a href="admin.php?page=dl_metrika_traffic&date=year" 
-			<?php if($_GET['date'] == 'year') echo 'class="current"' ?>>Год</a>
-			</li>-->
 		<li>
-			<a href="admin.php?page=dl_metrika_traffic&date=quart&group=<? echo $group;?>" 
+			<a href="admin.php?page=dl_metrika_traffic_load&date=quart&group=<? echo $group;?>" 
 			<? if($_GET['date'] == 'quart') echo 'class="current"' ?>>квартал</a>
 			</li>
 		<li>
-			<a href="admin.php?page=dl_metrika_traffic&date=month&group=<? echo $group; ?>" 
+			<a href="admin.php?page=dl_metrika_traffic_load&date=month&group=<? echo $group; ?>" 
 			<? if($_GET['date'] == '') echo 'class="current"';
 			if($_GET['date'] == 'month') echo 'class="current"' ?>>месяц</a>
 			</li>
 		<li style="border-right: 1px solid #e5e5e5;">
-			<a href="admin.php?page=dl_metrika_traffic&date=week&group=<? echo $group; ?>" 
+			<a href="admin.php?page=dl_metrika_traffic_load&date=week&group=<? echo $group; ?>" 
 			<? if($_GET['date'] == 'week') echo 'class="current"';
 			?>>неделя</a>
 			</li>
 		
 		<li style="margin: 0 10px;">Детализация</li>	
 		<li>
-			<a href="admin.php?page=dl_metrika_traffic&date=<? echo $_GET['date'] ?>&group=day" <? 
+			<a href="admin.php?page=dl_metrika_traffic_load&date=<? echo $_GET['date'] ?>&group=day" <? 
 			if($_GET['group'] == '') echo 'class="current"';
 			if($_GET['group'] == 'day') echo 'class="current"';?>>по дням</a>
 			</li>
 		<li>
-			<a href="admin.php?page=dl_metrika_traffic&date=<? echo $_GET['date'] ?>&group=week" <? if($_GET['group'] == 'week') echo 'class="current"';?>>по неделям</a>
+			<a href="admin.php?page=dl_metrika_traffic_load&date=<? echo $_GET['date'] ?>&group=week" <? if($_GET['group'] == 'week') echo 'class="current"';?>>по неделям</a>
 			</li>	
 		<li>
-			<a href="admin.php?page=dl_metrika_traffic&date=<? echo $_GET['date'] ?>&group=month" <? if($_GET['group'] == 'month') echo 'class="current"';?>>по месяцам</a>
+			<a href="admin.php?page=dl_metrika_traffic_load&date=<? echo $_GET['date'] ?>&group=month" <? if($_GET['group'] == 'month') echo 'class="current"';?>>по месяцам</a>
 			</li>	
 	</ul>
 </div>
@@ -124,42 +120,22 @@ foreach($json_data[data] as $key => $value) {
 <thead>
 <tr>
 	<th class="manage-column column-title"><a>Дата</a></th>
-	<th class="manage-column column-author">Визиты</th>
-	<th class="manage-column column-author">Просмотры</th>
-	<th class="manage-column column-author">Посетители</th>
-	<th class="manage-column column-author">Новые посетители</th>
-	<th class="manage-column column-author">Глубина просмотра</th>
-	<th class="manage-column column-author">Отказы</th>
-	<th class="manage-column column-author">Среднее время</th>
+	<th class="manage-column column-author">Запросы в секунду (максимум)</th>
+	<th class="manage-column column-author">Посетители онлайн (максимум)</th>
 </tr>
 </thead>
 
 <tbody>
 <?php
-
-$json_data = array_reverse($json_data[data]);
-
-foreach($json_data as $key => $value) { 
-	$traffic_date 			= $json_data[$key][date];
-	$traffic_visits 		= $json_data[$key][visits];
-	$traffic_page_views		= $json_data[$key][page_views];
-	$traffic_visitors		= $json_data[$key][visitors];
-	$traffic_depth			= $json_data[$key][depth];
-	$traffic_new_visitors	= $json_data[$key][new_visitors];
-	$traffic_denial			= $json_data[$key][denial];
-	$traffic_visit_time		= $json_data[$key][visit_time];
-	
-	$traffic_visit_time		= $traffic_visit_time/60;
+foreach($json_data[data] as $key => $value) { 
+	$traffic_date		= $json_data[data][$key][date];
+	$traffic_max_rps	= $json_data[data][$key][max_rps];
+	$traffic_max_users	= $json_data[data][$key][max_users];
 ?>  
 <tr>
   <th class="manage-column column-title"><a><?php echo date('Y.m.d',strtotime($traffic_date)); ?></a></th>
-  <th class="manage-column column-author"><?php echo $traffic_visits; ?></th>
-  <th class="manage-column column-author"><?php echo $traffic_page_views; ?></th>
-  <th class="manage-column column-author"><?php echo $traffic_visitors; ?></th>
-  <th class="manage-column column-author"><?php echo $traffic_new_visitors; ?></th>
-  <th class="manage-column column-author"><?php echo round($traffic_depth, 1); ?></th>
-  <th class="manage-column column-author"><?php echo round($traffic_denial, 1); ?></th>
-  <th class="manage-column column-author"><?php echo round($traffic_visit_time, 1); ?></th>
+  <th class="manage-column column-author"><?php echo $traffic_max_rps; ?></th>
+  <th class="manage-column column-author"><?php echo $traffic_max_users; ?></th>
 </tr>
 <?php } ?>
 </tbody>
