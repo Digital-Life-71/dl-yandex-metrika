@@ -14,7 +14,7 @@ function dl_yandex_metrika_menu(){
 	add_menu_page(
 		'DL Yandex Metrika',
 		'DL Metrika',
-		7,
+		'level_7',
 		'dl_metrika_dashboard',
 		'',
 		'dashicons-chart-area');
@@ -22,7 +22,7 @@ function dl_yandex_metrika_menu(){
 	add_submenu_page('dl_metrika_dashboard',
 		'Сводка',
 		'Сводка',
-		7,
+		'level_7',
 		'dl_metrika_dashboard',
 		'dl_yandex_metrika_start');
 
@@ -30,56 +30,56 @@ function dl_yandex_metrika_menu(){
 		add_submenu_page('dl_metrika_dashboard',
 			'Посещаемость',
 			'Посещаемость',
-			7,
+			'level_7',
 			'dl_metrika_traffic',
 			'dl_yandex_metrika_traffic');
 
 		add_submenu_page('dl_metrika_dashboard',
 			'География',
 			'География',
-			7,
+			'level_7',
 			'dl_metrika_geo',
 			'dl_yandex_metrika_geo');
 
 		add_submenu_page('dl_metrika_dashboard',
 			'Демография',
 			'Демография',
-			7,
+			'level_7',
 			'dl_metrika_demography',
 			'dl_yandex_metrika_demography');
 
 		add_submenu_page('dl_metrika_dashboard',
 			'Операционные системы',
 			'Операционные системы',
-			7,
+			'level_7',
 			'dl_metrika_os',
 			'dl_yandex_metrika_os');
 
 		add_submenu_page('dl_metrika_dashboard',
 			'Мобильные устройства',
 			'Мобильные устройства',
-			7,
+			'level_7',
 			'dl_metrika_mobile',
 			'dl_yandex_metrika_mobile');
 
 		add_submenu_page('dl_metrika_dashboard',
 			'Нагрузка на сайт',
 			'Нагрузка на сайт',
-			7,
+			'level_7',
 			'dl_metrika_traffic_load',
 			'dl_yandex_metrika_traffic_load');
 
 		add_submenu_page('dl_metrika_dashboard',
 			'Поведение на сайте',
 			'Поведение на сайте',
-			7,
+			'level_7',
 			'dl_metrika_inpage',
 			'dl_yandex_metrika_inpage');
 
 		add_submenu_page('dl_metrika_dashboard',
 			'Настройки',
 			'Настройки',
-			8,
+			'level_8',
 			'dl_metrika_settings',
 			'dl_yandex_metrika_settings');
 	}
