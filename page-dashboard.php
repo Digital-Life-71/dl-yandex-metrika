@@ -7,7 +7,7 @@ $json_data = file_get_contents($url);
 $json_data = json_decode($json_data, true);
 ?>
 <div class="wrap">
-<h2>Сводка за неделю (<?php echo date('d.m',strtotime($json_data['date1'])); ?> - <?php echo date('d.m',strtotime($json_data[date2])); ?>)</h2>
+<h2>Сводка за неделю (<?php echo date('d.m',strtotime($json_data['date1'])); ?> - <?php echo date('d.m',strtotime($json_data['date2'])); ?>)</h2>
 <script type="text/javascript">
       google.load("visualization", "1", {packages:["corechart"]});
       google.setOnLoadCallback(drawChart);
