@@ -18,11 +18,11 @@ function drawRegionsMap() {
 var data = google.visualization.arrayToDataTable([
   ['Страны', 'Визиты'],
 <?php
-foreach($json_data[data] as $key => $value) { 
-	
-	$geo_name 	= $json_data[data][$key][name];
-	$geo_visits = $json_data[data][$key][visits];
-	
+foreach($json_data['data'] as $key => $value) {
+
+	$geo_name 	= $json_data['data'][$key]['name'];
+	$geo_visits = $json_data['data'][$key]['visits'];
+
 	echo '[\''. $geo_name .'\','.$geo_visits.'],';
 
 }
@@ -36,20 +36,20 @@ var chart = new google.visualization.GeoChart(document.getElementById('regions')
 chart.draw(data, options);
 }
 </script>
-	
+
 
 <div class="wrap">
     <div class="postbox-container" style="width: 100%">
         <div class="metabox-holder">
             <div class="meta-box-sortables">
-			
-			
+
+
                 <div class="postbox" id="first">
                     <div class="inside">
 						<div id="regions" style="width: 100%; height: 500px;"></div>
                     </div>
                 </div>
-				
+
 
 <table class="wp-list-table widefat fixed striped posts">
 <thead>
@@ -59,23 +59,23 @@ chart.draw(data, options);
 	<th class="manage-column column-author">Просмотры</th>
 	<th class="manage-column column-author">Отказы</th>
 	<th class="manage-column column-author">Глубина просмотра</th>
-	<th class="manage-column column-author">Среднее время</th>	
+	<th class="manage-column column-author">Среднее время</th>
 </tr>
 </thead>
 
 <tbody>
 <?php
 
-foreach($json_data[data] as $key => $value) { 
-	$geo_name 			= $json_data[data][$key][name];
-	$geo_visits 		= $json_data[data][$key][visits];
-	$geo_page_views 	= $json_data[data][$key][page_views];
-	$geo_denial		 	= $json_data[data][$key][denial];
-	$geo_depth		 	= $json_data[data][$key][depth];
-	$geo_visit_time		= $json_data[data][$key][visit_time];
-	
+foreach($json_data['data'] as $key => $value) {
+	$geo_name 			= $json_data['data'][$key]['name'];
+	$geo_visits 		= $json_data['data'][$key]['visits'];
+	$geo_page_views 	= $json_data['data'][$key]['page_views'];
+	$geo_denial		 	= $json_data['data'][$key]['denial'];
+	$geo_depth		 	= $json_data['data'][$key]['depth'];
+	$geo_visit_time		= $json_data['data'][$key]['visit_time'];
+
 	$geo_visit_time		= $geo_visit_time/60;
-?>  
+?>
 <tr>
   <th class="manage-column column-title"><a><?php echo $geo_name; ?></a></th>
   <th class="manage-column column-author"><?php echo $geo_visits; ?></th>
@@ -86,7 +86,7 @@ foreach($json_data[data] as $key => $value) {
 </tr>
 <?php } ?>
 </tbody>
-</table>                        
+</table>
 
 <br>
 
@@ -98,8 +98,8 @@ foreach($json_data[data] as $key => $value) {
 			<a href="<?php echo $url.'&pretty=1'; ?>" target="_blank"><?php echo $url; ?></a><?php } ?>
 		</div>
 	</div>
-	<?php } ?>	
-	
+	<?php } ?>
+
 	<?php if(get_option('dl_yandex_metrika_developer') <> '') { ?>
 	<div class="postbox" id="second">
 		<h3 class="hndle" style="cursor: default">Массив данных</h3>
@@ -108,7 +108,7 @@ foreach($json_data[data] as $key => $value) {
 		</div>
 	</div>
 	<?php } ?>
-				
+
             </div>
         </div>
     </div>

@@ -7,7 +7,7 @@ $json_data = file_get_contents($url);
 $json_data = json_decode($json_data, true);
 ?>
 <div class="wrap">
-<h2>Сводка за неделю (<?php echo date('d.m',strtotime($json_data[date1])); ?> - <?php echo date('d.m',strtotime($json_data[date2])); ?>)</h2>
+<h2>Сводка за неделю (<?php echo date('d.m',strtotime($json_data['date1'])); ?> - <?php echo date('d.m',strtotime($json_data[date2])); ?>)</h2>
 <script type="text/javascript">
       google.load("visualization", "1", {packages:["corechart"]});
       google.setOnLoadCallback(drawChart);
@@ -15,11 +15,11 @@ $json_data = json_decode($json_data, true);
         var data = google.visualization.arrayToDataTable([
           ['Дата', 'Посетители'],
 <?php
-foreach($json_data[data] as $key => $value) { 
-	
-	$date = date('d.m.y',strtotime($json_data[data][$key][date]));
-	$visites = $json_data[data][$key][visits];
-	
+foreach($json_data['data'] as $key => $value) {
+
+	$date = date('d.m.y',strtotime($json_data['data'][$key]['date']));
+	$visites = $json_data['data'][$key]['visits'];
+
 	echo '[\''. $date .'\','.$visites.'],';
 
 }
@@ -42,11 +42,11 @@ foreach($json_data[data] as $key => $value) {
         var data = google.visualization.arrayToDataTable([
           ['Дата', 'Новые посетители'],
 <?php
-foreach($json_data[data] as $key => $value) { 
-	
-	$date = date('d.m.y',strtotime($json_data[data][$key][date]));
-	$new_visitors = $json_data[data][$key][new_visitors];
-	
+foreach($json_data['data'] as $key => $value) {
+
+	$date = date('d.m.y',strtotime($json_data['data'][$key]['date']));
+	$new_visitors = $json_data['data'][$key]['new_visitors'];
+
 	echo '[\''. $date .'\','.$new_visitors.'],';
 
 }
@@ -61,24 +61,24 @@ foreach($json_data[data] as $key => $value) {
         chart.draw(data, options);
       }
     </script>
-	
+
 
 <div class="wrap">
     <div class="postbox-container" style="width: 100%">
         <div class="metabox-holder">
             <div class="meta-box-sortables">
-			
-			
+
+
                 <div class="postbox" id="first">
-                    <h3 class="hndle" style="cursor: default">Посетители (<?php echo $json_data[totals][visits] ?>)</h3>
+                    <h3 class="hndle" style="cursor: default">Посетители (<?php echo $json_data['totals']['visits'] ?>)</h3>
                     <div class="inside">
                         <div id="visites_div" style="width: 90%; height: 150px;"></div>
                     </div>
                 </div>
-				
-				
+
+
                 <div class="postbox" id="second">
-                    <h3 class="hndle" style="cursor: default">Новые посетители (<?php echo $json_data[totals][visitors] ?>)</h3>
+                    <h3 class="hndle" style="cursor: default">Новые посетители (<?php echo $json_data['totals']['visitors'] ?>)</h3>
                     <div class="inside">
                         <div id="new_visitors_div" style="width: 90%; height: 150px;"></div>
                     </div>
@@ -92,8 +92,8 @@ foreach($json_data[data] as $key => $value) {
 			<a href="<?php echo $url.'&pretty=1'; ?>" target="_blank"><?php echo $url; ?></a><?php } ?>
 		</div>
 	</div>
-	<?php } ?>	
-	
+	<?php } ?>
+
 	<?php if(get_option('dl_yandex_metrika_developer') <> '') { ?>
 	<div class="postbox" id="second">
 		<h3 class="hndle" style="cursor: default">Массив данных</h3>
