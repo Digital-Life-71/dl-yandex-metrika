@@ -35,6 +35,9 @@ Stable tag: 1.2
 4. Страница "Демография"
 
 == Changelog ==
+= 1.2 =
+* bug fixes
+
 = 1.1 =
 * bug fixes
 
