@@ -2,73 +2,76 @@
 /*
 Plugin Name: DL Yandex Metrika
 Description: Яндекс.Метрика — это сервис веб-аналитики для оценки эффективности сайтов. Он позволяет анализировать:конверсию и выручку сайта, эффективность рекламы (Яндекс.Директ, Яндекс.Маркет и т. д.), аудиторию сайта и поведение посетителей, источники, привлекающие посетителей. Все инструменты Яндекс.Метрики бесплатны.
-Plugin URI: http://vcard.dd-l.name/wp-plugins/
-Version: 0.3.6.1
+Plugin URI: http://dd-l.name/wordpress-plugins/
+Version: 1.2
 Author: Dyadya Lesha (info@dd-l.name)
 Author URI: http://dd-l.name
 */
 
+include_once 'filter.php'; 
+
 add_action( 'admin_menu', 'dl_yandex_metrika_menu' );
+
 function dl_yandex_metrika_menu(){	
 
-	add_menu_page( 
+	add_menu_page
+	( 
 		'DL Yandex Metrika',
 		'DL Metrika',
 		7,
 		'dl_metrika_dashboard',
 		'',
-		'dashicons-chart-area');
+		'dashicons-chart-area',
+		3
+	);
 
-	add_submenu_page('dl_metrika_dashboard', 
-		'Сводка', 
-		'Сводка', 
+	add_submenu_page
+	(				    
+		'dl_metrika_dashboard', 
+		'Посещаемость', 
+		'Посещаемость', 
 		7, 
 		'dl_metrika_dashboard', 
-		'dl_yandex_metrika_start');
+		'dl_yandex_metrika_start'
+	);
 		
-	if(get_option('dl_yandex_metrika_id') <> '') {
+	if(get_option('dl_yandex_metrika_id') <> '')
+	{
 		add_submenu_page('dl_metrika_dashboard', 
-			'Посещаемость', 
-			'Посещаемость', 
+			'Источники, сводка', 
+			'Источники, сводка', 
 			7, 
-			'dl_metrika_traffic', 
-			'dl_yandex_metrika_traffic');
-			
+			'dl_metrika_sources_summary', 
+			'dl_yandex_metrika_sources_summary');
+		
 		add_submenu_page('dl_metrika_dashboard', 
-			'География', 
-			'География', 
+			'Сайты', 
+			'Сайты', 
 			7, 
-			'dl_metrika_geo', 
-			'dl_yandex_metrika_geo');
-
+			'dl_metrika_sources_sites', 
+			'dl_yandex_metrika_sources_sites');
+		
 		add_submenu_page('dl_metrika_dashboard', 
-			'Демография', 
-			'Демография', 
+			'Поисковые системы', 
+			'Поисковые системы', 
 			7, 
-			'dl_metrika_demography', 
-			'dl_yandex_metrika_demography');
-			
+			'dl_metrika_search_engines', 
+			'dl_yandex_metrika_search_engines');
+		
 		add_submenu_page('dl_metrika_dashboard', 
-			'Операционные системы', 
-			'Операционные системы', 
+			'Поисковые фразы', 
+			'Поисковые фразы', 
 			7, 
-			'dl_metrika_os', 
-			'dl_yandex_metrika_os');
-			
+			'dl_metrika_sources_search_phrases', 
+			'dl_yandex_metrika_sources_search_phrases');
+		
 		add_submenu_page('dl_metrika_dashboard', 
-			'Мобильные устройства', 
-			'Мобильные устройства', 
+			'Социальные сети', 
+			'Социальные сети', 
 			7, 
-			'dl_metrika_mobile', 
-			'dl_yandex_metrika_mobile');	
-			
-		add_submenu_page('dl_metrika_dashboard', 
-			'Нагрузка на сайт', 
-			'Нагрузка на сайт', 
-			7, 
-			'dl_metrika_traffic_load', 
-			'dl_yandex_metrika_traffic_load');	
-
+			'dl_metrika_sources_social', 
+			'dl_yandex_metrika_sources_social');
+		
 		add_submenu_page('dl_metrika_dashboard', 
 			'Поведение на сайте', 
 			'Поведение на сайте', 
@@ -82,50 +85,49 @@ function dl_yandex_metrika_menu(){
 			8, 
 			'dl_metrika_settings', 
 			'dl_yandex_metrika_settings');	
-	}	
+	}
 }
-
 
 function dl_yandex_metrika_start() { 
 	if(get_option('dl_yandex_metrika_id') == '') {
 		include 'page-install.php'; 
 	} else {
-		include 'page-dashboard.php';
+		include 'page-traffic.php';
 	}
-}
-
-
-function dl_yandex_metrika_settings(){
-	include 'page-settings.php';
 }
 
 function dl_yandex_metrika_traffic(){
 	include 'page-traffic.php';
 }
 
-function dl_yandex_metrika_geo(){
-	include 'page-geo.php';
+function dl_yandex_metrika_sources_summary(){
+	include 'page-sources-summary.php';
 }
 
-function dl_yandex_metrika_demography(){
-	include 'page-demography.php';
+function dl_yandex_metrika_sources_sites(){
+	include 'page-sources-sites.php';
 }
 
-function dl_yandex_metrika_os(){
-	include 'page-os.php';
+function dl_yandex_metrika_search_engines(){
+	include 'page-search-engines.php';
 }
 
-function dl_yandex_metrika_mobile(){
-	include 'page-mobile.php';
+function dl_yandex_metrika_sources_search_phrases(){
+	include 'page-sources-search-phrases.php';
 }
 
-function dl_yandex_metrika_traffic_load(){
-	include 'page-traffic-load.php';
+function dl_yandex_metrika_sources_social(){
+	include 'page-sources-social.php';
 }
 
 function dl_yandex_metrika_inpage(){
 	include 'page-inpage.php';
 }
+
+function dl_yandex_metrika_settings(){
+	include 'page-settings.php';
+}
+
 
 add_action( 'admin_init', 'dl_yandex_metrika_register_settings' );
 function dl_yandex_metrika_register_settings() {
@@ -146,16 +148,35 @@ function dl_yandex_metrika_deactivate(){
 	delete_option("dl_yandex_metrika_developer_url");
 }
 
-
-add_action( 'admin_enqueue_scripts', 'dl_yandex_metrika_admin_load_scripts' );
-function dl_yandex_metrika_admin_load_scripts() {
-    wp_enqueue_script( 'my_custom_script', 'https://www.google.com/jsapi' );
-}
-
-
 function dl_select_options_counters() {
-	$url_counters = file_get_contents('https://api-metrika.yandex.ru/counters.json?oauth_token='.get_option('dl_yandex_metrika_token'));
-	$json_data = json_decode($url_counters, true);
+	
+	$url ='https://api-metrika.yandex.net/management/v1/counters';
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL,$url);
+	curl_setopt($ch, CURLOPT_FAILONERROR,1);
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION,1);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+	curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+	curl_setopt($ch, CURLOPT_HTTPHEADER,
+		array(
+			'Host: api-metrika.yandex.net',
+			'Authorization: OAuth '.get_option('dl_yandex_metrika_token'),
+			'Content-Type: application/x-yametrika+json',
+			'Access-Control-Allow-Origin: *'
+		));
+
+	$json_data = curl_exec($ch);
+
+	curl_close($ch);
+
+
+	$json_data = json_decode($json_data, true);
+
+
+	/*echo '<pre>';
+	print_r($json_data);
+	echo '</pre>';*/
+	
 	echo '<select name="dl_yandex_metrika_id">';
 	
 	foreach($json_data[counters] as $key => $value) { 
@@ -169,174 +190,3 @@ function dl_select_options_counters() {
 	
 	echo '</select>';
 }
-
-if(get_option('dl_yandex_metrika_id') <> '') {
-	require_once( plugin_dir_path( __FILE__ ) . 'widgets/dashboard-widgets-traffic.php');
-	require_once( plugin_dir_path( __FILE__ ) . 'widgets/dashboard-widgets-geo.php' );
-	require_once( plugin_dir_path( __FILE__ ) . 'widgets/dashboard-widgets-demography.php' );
-}
-
-// добавляем ссылку на панель WordPress
-// добавляем ссылку на панель WordPress
-function dl_yandex_metrika_toolbar($wp_admin_bar) {
-	$args = array(
-		'id' => 'dl_yandex_metrika_toolbar',
-		'title' => 'DL Metrika', 
-		'href' => '/wp-admin/admin.php?page=dl_metrika_dashboard', 
-		'meta' => array( 
-		'target' => '_self',
-			'title' => 'DL Metrika',
-			)
-	);
-	$wp_admin_bar->add_node($args);
-	
-	
-	$args = array(
-		'id' => 'dl_metrika_dashboard',
-		'title' => 'Сводка', 
-		'href' => '/wp-admin/admin.php?page=dl_metrika_dashboard',
-		'parent' => 'dl_yandex_metrika_toolbar', 
-		'meta' => array( 
-			'title' => 'Сводка'
-			)
-	);
-	$wp_admin_bar->add_node($args);
-	
-	$args = array(
-		'id' => 'dl_metrika_traffic',
-		'title' => 'Посещаемость', 
-		'href' => '/wp-admin/admin.php?page=dl_metrika_traffic',
-		'parent' => 'dl_yandex_metrika_toolbar', 
-		'meta' => array( 
-			'title' => 'Посещаемость'
-			)
-	);
-	$wp_admin_bar->add_node($args);
-	
-	$args = array(
-		'id' => 'dl_metrika_geo',
-		'title' => 'География', 
-		'href' => '/wp-admin/admin.php?page=dl_metrika_geo',
-		'parent' => 'dl_yandex_metrika_toolbar', 
-		'meta' => array( 
-			'title' => 'География'
-			)
-	);
-	$wp_admin_bar->add_node($args);
-	
-	$args = array(
-		'id' => 'dl_metrika_demography',
-		'title' => 'Демография', 
-		'href' => '/wp-admin/admin.php?page=dl_metrika_demography',
-		'parent' => 'dl_yandex_metrika_toolbar', 
-		'meta' => array( 
-			'title' => 'Демография'
-			)
-	);
-	$wp_admin_bar->add_node($args);
-	
-	$args = array(
-		'id' => 'dl_metrika_os',
-		'title' => 'Операционные системы', 
-		'href' => '/wp-admin/admin.php?page=dl_metrika_os',
-		'parent' => 'dl_yandex_metrika_toolbar', 
-		'meta' => array( 
-			'title' => 'Операционные системы'
-			)
-	);
-	$wp_admin_bar->add_node($args);
-	
-	$args = array(
-		'id' => 'dl_metrika_mobile',
-		'title' => 'Мобильные устройства', 
-		'href' => '/wp-admin/admin.php?page=dl_metrika_mobile',
-		'parent' => 'dl_yandex_metrika_toolbar', 
-		'meta' => array( 
-			'title' => 'Мобильные устройства'
-			)
-	);
-	$wp_admin_bar->add_node($args);
-	
-	$args = array(
-		'id' => 'dl_metrika_traffic_load',
-		'title' => 'Нагрузка на сайт', 
-		'href' => '/wp-admin/admin.php?page=dl_metrika_traffic_load',
-		'parent' => 'dl_yandex_metrika_toolbar', 
-		'meta' => array( 
-			'title' => 'Нагрузка на сайт'
-			)
-	);
-	$wp_admin_bar->add_node($args);
-	
-	$args = array(
-		'id' => 'dl_metrika_inpage',
-		'title' => 'Поведение на сайте', 
-		'href' => '/wp-admin/admin.php?page=dl_metrika_inpage',
-		'parent' => 'dl_yandex_metrika_toolbar', 
-		'meta' => array( 
-			'title' => 'Поведение на сайте'
-			)
-	);
-	$wp_admin_bar->add_node($args);
-	
-	$args = array(
-		'id' => 'dl_metrika_inpage_visor',
-		'title' => 'Вебвизор', 
-		'href' => 'https://metrika.yandex.ru/stat/visor?id='.get_option('dl_yandex_metrika_id'),
-		'parent' => 'dl_metrika_inpage', 
-		'meta' => array( 
-			'target' => '_blank',
-			'title' => 'Вебвизор'
-			)
-	);
-	$wp_admin_bar->add_node($args);
-	
-	$args = array(
-		'id' => 'dl_metrika_inpage_link_map',
-		'title' => 'Карта ссылок', 
-		'href' => 'http://inpage.metrika.yandex.ru/inpage/link_map?id='.get_option('dl_yandex_metrika_id'),
-		'parent' => 'dl_metrika_inpage', 
-		'meta' => array( 
-			'target' => '_blank',
-			'title' => 'Карта ссылок'
-			)
-	);
-	$wp_admin_bar->add_node($args);
-	
-	$args = array(
-		'id' => 'dl_metrika_inpage_click_map',
-		'title' => 'Карта кликов', 
-		'href' => 'http://inpage.metrika.yandex.ru/inpage/click_map?id='.get_option('dl_yandex_metrika_id'),
-		'parent' => 'dl_metrika_inpage', 
-		'meta' => array( 
-			'target' => '_blank',
-			'title' => 'Карта кликов'
-			)
-	);
-	$wp_admin_bar->add_node($args);
-	
-	$args = array(
-		'id' => 'dl_metrika_inpage_scroll_map',
-		'title' => 'Карта скроллинга', 
-		'href' => 'http://inpage.metrika.yandex.ru/inpage/scroll_map?id='.get_option('dl_yandex_metrika_id'),
-		'parent' => 'dl_metrika_inpage', 
-		'meta' => array( 
-			'target' => '_blank',
-			'title' => 'Карта скроллинга'
-			)
-	);
-	$wp_admin_bar->add_node($args);
-	
-	$args = array(
-		'id' => 'dl_metrika_inpage_form_analysis',
-		'title' => 'Аналитика форм', 
-		'href' => 'http://inpage.metrika.yandex.ru/inpage/form_analysis?id='.get_option('dl_yandex_metrika_id'),
-		'parent' => 'dl_metrika_inpage', 
-		'meta' => array( 
-			'target' => '_blank',
-			'title' => 'Аналитика форм'
-			)
-	);
-	$wp_admin_bar->add_node($args);
-}
-add_action('admin_bar_menu', 'dl_yandex_metrika_toolbar', 99);

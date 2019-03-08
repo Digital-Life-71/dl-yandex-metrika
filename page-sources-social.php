@@ -28,18 +28,16 @@ if($period == '' ) {
 ?>
 
 <div class="wrap">
-<h2>Посещаемость <a href="https://metrika.yandex.ru/stat/traffic?id=<?php echo $dl_metrika_id; ?>" target="_blank" style="float: right" class="button">Отчет на Yandex.Metrika</a></h2>
+<h2>Социальные сети <a href="https://metrika.yandex.ru/stat/social_networks?id=<?php echo $dl_metrika_id; ?>" target="_blank" style="float: right" class="button">Отчет на Yandex.Metrika</a></h2>
 
 <p class="description" ></p>
 
-<?php dl_yandex_metrika_filtr(); ?>
+<?php dl_yandex_metrika_filtr_date(); ?>
 
 <?php
-	
-	
 	$array_url_data = array(
-		'preset' => 'traffic',
-		'metrics' => 'ym:s:visits,ym:s:users,ym:s:pageviews,ym:s:percentNewVisitors,ym:s:bounceRate,ym:s:pageDepth,ym:s:avgVisitDurationSeconds',
+		'preset' => 'sources_social',
+		'metrics' => 'ym:s:visits,ym:s:users,ym:s:bounceRate,ym:s:pageDepth,ym:s:avgVisitDurationSeconds',
 		'group' => $period,
 		'date1' => $date1,
 		'date2' => $date2,
@@ -66,11 +64,19 @@ if($period == '' ) {
 	$json_data = curl_exec($ch);
 
 	curl_close($ch);
-	
+
 	$json_data = json_decode($json_data, true);
 	?>
 	
-
+	<!--
+	<pre>
+	<?php print_r($array_url_data); ?>
+	</pre>
+	
+	<pre>
+	<?php print_r($json_data); ?>
+	</pre>
+	-->
 	
 	<div class="tablenav top">
 
@@ -79,11 +85,9 @@ if($period == '' ) {
 	<table class="wp-list-table widefat fixed striped posts">
 	<thead>
 		<tr>
-			<th class="manage-column column-title"><a>Дата</a></th>
+			<th class="manage-column column-title"><a>Cоциальная сеть, Группа соц. сети</a></th>
 			<th class="manage-column column-author">Визиты</th>
 			<th class="manage-column column-author">Посетители</th>
-			<th class="manage-column column-author">Просмотры</th>
-			<th class="manage-column column-author">Доля новых посетителей</th>
 			<th class="manage-column column-author">Отказы</th>
 			<th class="manage-column column-author">Глубина просмотра</th>
 			<th class="manage-column column-author">Время на сайте, м</th>
@@ -95,11 +99,9 @@ if($period == '' ) {
 			<th class="manage-column column-title"><a>Итого и средние</a></th>
 			<th class="manage-column column-author"><?php echo $json_data[totals][0]; ?></th>
 			<th class="manage-column column-author"><?php echo $json_data[totals][1]; ?></th>
-			<th class="manage-column column-author"><?php echo $json_data[totals][2]; ?></th>
-			<th class="manage-column column-author"><?php echo round($json_data[totals][3], 2); ?> %</th>
-			<th class="manage-column column-author"><?php echo round($json_data[totals][4], 2); ?> %</th>
-			<th class="manage-column column-author"><?php echo round($json_data[totals][5], 2); ?></th>
-			<th class="manage-column column-author"><?php echo round($json_data[totals][6]/60, 2); ?></th>
+			<th class="manage-column column-author"><?php echo round($json_data[totals][2], 2); ?> %</th>
+			<th class="manage-column column-author"><?php echo round($json_data[totals][3], 2); ?></th>
+			<th class="manage-column column-author"><?php echo round($json_data[totals][4]/60, 2); ?></th>
 		</tr>
 		
 		<?php
@@ -108,23 +110,19 @@ if($period == '' ) {
 		
 		foreach($json_data as $key => $value)
 		{ 
-			$date	= $json_data[$key][dimensions][0][id];
+			$name	= $json_data[$key][dimensions][0][name];
 			$visits	= $json_data[$key][metrics][0];
-			$users	= $json_data[$key][metrics][1];		
-			$pageviews	= $json_data[$key][metrics][2];
-			$percentNewVisitors	= $json_data[$key][metrics][3];
-			$bounceRate	= $json_data[$key][metrics][4];
-			$pageDepth	= $json_data[$key][metrics][5];
-			$avgVisitDurationSeconds	= $json_data[$key][metrics][6];
+			$users	= $json_data[$key][metrics][1];
+			$bounceRate	= $json_data[$key][metrics][2];
+			$pageDepth	= $json_data[$key][metrics][3];
+			$avgVisitDurationSeconds	= $json_data[$key][metrics][4];
 			
 			$avgVisitDurationSeconds	= $avgVisitDurationSeconds/60; 
 		?>  
 		<tr>
-			<th class="manage-column column-title"><a><?php echo date('d.m.Y', strtotime($date)); ?></a></th>
+			<th class="manage-column column-title"><a><?php echo $name; ?></a></th>
 			<th class="manage-column column-author"><?php echo $visits; ?></th>
 			<th class="manage-column column-author"><?php echo $users; ?></th>
-			<th class="manage-column column-author"><?php echo $pageviews; ?></th>
-			<th class="manage-column column-author"><?php echo round($percentNewVisitors, 2); ?> %</th>
 			<th class="manage-column column-author"><?php echo round($bounceRate, 2); ?> %</th>
 			<th class="manage-column column-author"><?php echo round($pageDepth, 2); ?></th>
 			<th class="manage-column column-author"><?php echo round($avgVisitDurationSeconds, 2); ?></th>
@@ -136,11 +134,9 @@ if($period == '' ) {
 	
 	<tfoot>
 		<tr>
-			<th class="manage-column column-title"><a>Дата</a></th>
+			<th class="manage-column column-title"><a>Cоциальная сеть, Группа соц. сети</a></th>
 			<th class="manage-column column-author">Визиты</th>
 			<th class="manage-column column-author">Посетители</th>
-			<th class="manage-column column-author">Просмотры</th>
-			<th class="manage-column column-author">Доля новых посетителей</th>
 			<th class="manage-column column-author">Отказы</th>
 			<th class="manage-column column-author">Глубина просмотра</th>
 			<th class="manage-column column-author">Время на сайте, м</th>

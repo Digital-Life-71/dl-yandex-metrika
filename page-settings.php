@@ -10,7 +10,7 @@
 		<th scope="row">Сайт</th>
 		<td><?php dl_select_options_counters(); ?></td>
 	</tr>
-	<tr valign="top">
+	<!--<tr valign="top">
 		<th scope="row">Режим разработки</th>
 		<td>
 		<p><input
@@ -29,7 +29,7 @@
 			<? checked( '0', get_option( 'dl_yandex_metrika_developer' ) ); ?>
 			/><label for="dl_yandex_metrika_developer"> - выводить массив данных</label></p>
 			</td>
-	</tr>
+	</tr>-->
 	</table>
 	
 

@@ -1,10 +1,10 @@
 ﻿=== DL Yandex Metrika ===
 Contributors: dyadyalesha
-Plugin URI: http://vcad.dd-l.name/wp-plugins/
+Plugin URI: http://dd-l.name/wordpress-plugins/
 Tags: dl, yandex, metrika, yandex metrika, seo
 Requires at least: 3.2
-Tested up to: 4.3
-Stable tag: 0.3.6.1
+Tested up to: 5.1
+Stable tag: 1.2
 
 Яндекс.Метрика для вашей консоли WordPress
 
@@ -35,6 +35,18 @@ Stable tag: 0.3.6.1
 4. Страница "Демография"
 
 == Changelog ==
+= 1.1 =
+* bug fixes
+
+= 1.0.1 =
+* bug fixes
+
+= 1.0 =
+* Update to the new api yandex metrika
+
+= 0.3.6.2 =
+* bug fixes
+
 = 0.3.6.1 =
 * bug fixes
 
